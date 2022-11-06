@@ -11,7 +11,7 @@ class CatalogClientService(private val clientRepository: ClientRepository) {
 
     @Transactional
     fun save(client: Client): Client {
-        val isEmailInUse: Boolean = clientRepository.findByEmail(client.email)
+        val isEmailInUse: Boolean = clientRepository.findByEmail(client.email!!)
                 .stream().anyMatch { existingClient ->
                 existingClient.id != client.id
             }

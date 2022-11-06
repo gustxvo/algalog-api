@@ -18,14 +18,16 @@ data class Client(
 
     @field:NotBlank
     @Size(max = 60)
+    @NotNull
     val name: String?,
 
     @field:Email
     @field:NotBlank
-    @field:NotNull
-    val email: String,
+    @NotNull
+    val email: String?,
 
     @field:NotBlank
+    @NotNull
     @field:Size(max = 20)
     val phone: String?
 )
