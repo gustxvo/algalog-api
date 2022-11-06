@@ -1,5 +1,6 @@
 package com.algaworks.algalog.domain.model
 
+import com.algaworks.algalog.domain.ValidationGroups
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
@@ -12,6 +13,7 @@ import javax.validation.constraints.Size
 @Entity
 data class Client(
 
+    @NotNull(groups = [ValidationGroups.ClientId::class])
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,

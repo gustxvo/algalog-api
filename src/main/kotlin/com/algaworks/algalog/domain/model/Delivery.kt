@@ -1,8 +1,14 @@
 package com.algaworks.algalog.domain.model
 
+import com.algaworks.algalog.domain.ValidationGroups
+import com.fasterxml.jackson.annotation.JsonProperty
 import java.math.BigDecimal
 import java.time.OffsetDateTime
 import javax.persistence.*
+import javax.validation.Valid
+import javax.validation.constraints.NotNull
+import javax.validation.groups.ConvertGroup
+import javax.validation.groups.Default
 
 @Entity
 data class Delivery(
@@ -11,22 +17,26 @@ data class Delivery(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
 
+    @Valid
+    @ConvertGroup(from = Default::class, to = ValidationGroups.ClientId::class)
+    @NotNull
     @ManyToOne
-//    @JoinColumn(name = "client_id") -> Not needed to include explicitly
     val client: Client,
 
+    @Valid
     @Embedded
     val addressee: Addressee,
 
+    @NotNull
     val fee: BigDecimal,
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @Enumerated(EnumType.STRING)
-    @Column(name = "status")
     val status: StatusDelivery?,
 
-    @Column(name = "request_date")
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     val requestDate: OffsetDateTime?,
 
-    @Column(name = "end_date")
-    val endDate: OffsetDateTime?
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    val finishDate: OffsetDateTime?
 )

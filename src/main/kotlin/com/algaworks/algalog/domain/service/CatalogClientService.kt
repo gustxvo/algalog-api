@@ -12,7 +12,7 @@ class CatalogClientService(private val clientRepository: ClientRepository) {
     @Transactional
     fun save(client: Client): Client {
         val isEmailInUse: Boolean = clientRepository.findByEmail(client.email!!)
-                .stream().anyMatch { existingClient ->
+            .stream().anyMatch { existingClient ->
                 existingClient.id != client.id
             }
 
@@ -26,5 +26,10 @@ class CatalogClientService(private val clientRepository: ClientRepository) {
     @Transactional
     fun delete(clientId: Long) {
         clientRepository.deleteById(clientId)
+    }
+
+    fun findById(clientId: Long): Client {
+        return clientRepository.findById(clientId)
+            .orElseThrow { DomainException("Client not found") }
     }
 }
