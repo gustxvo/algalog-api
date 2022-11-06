@@ -2,6 +2,7 @@ package com.algaworks.algalog.api.controller
 
 import com.algaworks.algalog.domain.model.Client
 import com.algaworks.algalog.domain.repository.ClientRepository
+import com.algaworks.algalog.domain.service.CatalogClientService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -9,7 +10,7 @@ import javax.validation.Valid
 
 @RequestMapping("/clients")
 @RestController
-class ClientController(val clientRepository: ClientRepository) {
+class ClientController(private val clientRepository: ClientRepository, private val catalogClientService: CatalogClientService) {
 
     @GetMapping
     fun list(): List<Client> {
@@ -26,7 +27,7 @@ class ClientController(val clientRepository: ClientRepository) {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     fun add(@Valid @RequestBody client: Client): Client {
-        return clientRepository.save(client)
+        return catalogClientService.save(client)
     }
 
     @PutMapping("/{clientId}")
@@ -38,7 +39,7 @@ class ClientController(val clientRepository: ClientRepository) {
             return ResponseEntity.notFound().build()
         }
         val updatedClient = client.copy(id = clientId)
-        return ResponseEntity.ok(clientRepository.save(updatedClient))
+        return ResponseEntity.ok(catalogClientService.save(updatedClient))
     }
 
     @DeleteMapping("/{clientId}")
@@ -46,7 +47,7 @@ class ClientController(val clientRepository: ClientRepository) {
         if (!clientRepository.existsById(clientId)) {
             return ResponseEntity.notFound().build()
         }
-        clientRepository.deleteById(clientId)
+        catalogClientService.delete(clientId)
         return ResponseEntity.noContent().build()
     }
 }

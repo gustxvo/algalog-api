@@ -6,6 +6,7 @@ import javax.persistence.GenerationType
 import javax.persistence.Id
 import javax.validation.constraints.Email
 import javax.validation.constraints.NotBlank
+import javax.validation.constraints.NotNull
 import javax.validation.constraints.Size
 
 @Entity
@@ -21,7 +22,8 @@ data class Client(
 
     @field:Email
     @field:NotBlank
-    val email: String?,
+    @field:NotNull
+    val email: String,
 
     @field:NotBlank
     @field:Size(max = 20)
