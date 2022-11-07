@@ -1,12 +1,12 @@
 package com.algaworks.algalog.api.exceptionhandler
 
 import com.fasterxml.jackson.annotation.JsonInclude
-import java.time.LocalDateTime
+import java.time.OffsetDateTime
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 class ExceptionMessage(
     val status: Int,
-    val dateTime: LocalDateTime,
+    val dateTime: OffsetDateTime,
     val title: String,
     val fields: List<Field>? = null
 ) {

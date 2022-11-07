@@ -32,7 +32,7 @@ data class Delivery(
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @Enumerated(EnumType.STRING)
-    val status: StatusDelivery?,
+    val status: DeliveryStatus?,
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     val requestDate: OffsetDateTime?,

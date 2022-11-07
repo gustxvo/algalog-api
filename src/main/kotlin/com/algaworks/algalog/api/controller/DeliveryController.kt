@@ -1,5 +1,7 @@
 package com.algaworks.algalog.api.controller
 
+import com.algaworks.algalog.api.model.AddresseeModel
+import com.algaworks.algalog.api.model.DeliveryModel
 import com.algaworks.algalog.domain.model.Delivery
 import com.algaworks.algalog.domain.repository.DeliveryRepository
 import com.algaworks.algalog.domain.service.DeliveryRequestService
@@ -20,9 +22,27 @@ class DeliveryController(
     }
 
     @GetMapping("/{deliveryId}")
-    fun getDelivery(@PathVariable deliveryId: Long): ResponseEntity<Delivery> {
+    fun getDelivery(@PathVariable deliveryId: Long): ResponseEntity<DeliveryModel> {
         return deliveryRepository.findById(deliveryId)
-            .map { ResponseEntity.ok(it) }
+            .map { delivery ->
+                val deliveryModel = DeliveryModel(
+                    id = delivery.id,
+                    clientName = delivery.client.name ?: "",
+                    addressee = AddresseeModel(
+                        name = delivery.addressee.name,
+                        street = delivery.addressee.street,
+                        number = delivery.addressee.number,
+                        complement = delivery.addressee.complement,
+                        district = delivery.addressee.district
+                    ),
+                    fee = delivery.fee,
+                    deliveryStatus = delivery.status,
+                    requestDate = delivery.requestDate,
+                    finishDate = delivery.finishDate
+                )
+                 ResponseEntity.ok(deliveryModel)
+
+            }
             .orElse(ResponseEntity.notFound().build())
     }
 

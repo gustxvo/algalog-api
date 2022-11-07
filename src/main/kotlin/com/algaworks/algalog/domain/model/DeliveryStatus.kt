@@ -1,6 +1,6 @@
 package com.algaworks.algalog.domain.model
 
-enum class StatusDelivery {
+enum class DeliveryStatus {
     PENDING,
     FINISHED,
     CANCELED

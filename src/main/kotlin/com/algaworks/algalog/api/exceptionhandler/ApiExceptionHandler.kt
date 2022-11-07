@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.context.request.WebRequest
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
-import java.time.LocalDateTime
+import java.time.OffsetDateTime
 
 @ControllerAdvice
 class ApiExceptionHandler(private val messageSource: MessageSource) : ResponseEntityExceptionHandler() {
@@ -35,7 +35,7 @@ class ApiExceptionHandler(private val messageSource: MessageSource) : ResponseEn
         val exceptionMessage =
             ExceptionMessage(
                 status.value(),
-                LocalDateTime.now(),
+                OffsetDateTime.now(),
                 "One or more invalid fields. Fill in correctly and try again",
                 invalidFields
             )
@@ -50,7 +50,7 @@ class ApiExceptionHandler(private val messageSource: MessageSource) : ResponseEn
         val exceptionMessage =
             ExceptionMessage(
                 status.value(),
-                LocalDateTime.now(),
+                OffsetDateTime.now(),
                 exception.message,
             )
 
