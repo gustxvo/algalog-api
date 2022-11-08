@@ -1,6 +1,7 @@
 package com.algaworks.algalog.api.exceptionhandler
 
 import com.algaworks.algalog.domain.exception.DomainException
+import com.algaworks.algalog.domain.exception.EntityNotFoundException
 import org.springframework.context.MessageSource
 import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.http.HttpHeaders
@@ -45,8 +46,20 @@ class ApiExceptionHandler(private val messageSource: MessageSource) : ResponseEn
 
     @ExceptionHandler(DomainException::class)
     fun handleDomainException(exception: DomainException, request: WebRequest): ResponseEntity<Any> {
-
         val status = HttpStatus.BAD_REQUEST
+        val exceptionMessage =
+            ExceptionMessage(
+                status.value(),
+                OffsetDateTime.now(),
+                exception.message,
+            )
+
+        return handleExceptionInternal(exception, exceptionMessage, HttpHeaders(), status, request)
+    }
+
+    @ExceptionHandler(EntityNotFoundException::class)
+    fun handleEntityNotFoundException(exception: DomainException, request: WebRequest): ResponseEntity<Any> {
+        val status = HttpStatus.NOT_FOUND
         val exceptionMessage =
             ExceptionMessage(
                 status.value(),

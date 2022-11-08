@@ -29,10 +29,23 @@ data class Delivery(
     @NotNull
     val fee: BigDecimal,
 
+    @OneToMany(mappedBy = "delivery", cascade = [CascadeType.ALL])
+    val occurrences: MutableList<Occurrence> = arrayListOf(),
+
     @Enumerated(EnumType.STRING)
     val status: DeliveryStatus?,
 
     val requestDate: OffsetDateTime?,
 
     val finishDate: OffsetDateTime?
-)
+) {
+    fun addOccurrence(description: String): Occurrence {
+        val occurrence = Occurrence(
+            description = description,
+            delivery = this,
+            registerDate = OffsetDateTime.now(),
+        )
+        this.occurrences.add(occurrence)
+        return occurrence
+    }
+}
