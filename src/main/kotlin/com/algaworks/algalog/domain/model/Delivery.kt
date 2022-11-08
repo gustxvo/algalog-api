@@ -1,6 +1,7 @@
 package com.algaworks.algalog.domain.model
 
 import com.algaworks.algalog.domain.ValidationGroups
+import com.algaworks.algalog.domain.exception.DomainException
 import java.math.BigDecimal
 import java.time.OffsetDateTime
 import javax.persistence.*
@@ -33,11 +34,11 @@ data class Delivery(
     val occurrences: MutableList<Occurrence> = arrayListOf(),
 
     @Enumerated(EnumType.STRING)
-    val status: DeliveryStatus?,
+    var status: DeliveryStatus?,
 
     val requestDate: OffsetDateTime?,
 
-    val finishDate: OffsetDateTime?
+    var finishDate: OffsetDateTime?
 ) {
     fun addOccurrence(description: String): Occurrence {
         val occurrence = Occurrence(
@@ -48,4 +49,15 @@ data class Delivery(
         this.occurrences.add(occurrence)
         return occurrence
     }
+
+    fun finish(): Delivery {
+        if (!canBeFinished()) {
+            throw DomainException("Delivery cannot be finished")
+        }
+        status = DeliveryStatus.FINISHED
+        finishDate = OffsetDateTime.now()
+        return this
+    }
+
+    private fun canBeFinished() = DeliveryStatus.PENDING == status
 }

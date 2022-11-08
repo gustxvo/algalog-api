@@ -4,6 +4,7 @@ import com.algaworks.algalog.api.model.DeliveryModel
 import com.algaworks.algalog.api.model.input.DeliveryInput
 import com.algaworks.algalog.domain.repository.DeliveryRepository
 import com.algaworks.algalog.domain.service.DeliveryRequestService
+import com.algaworks.algalog.domain.service.FinishDeliveryService
 import com.algaworks.algalog.mapper.toDeliveryModel
 import com.algaworks.algalog.mapper.toEntity
 import org.springframework.http.HttpStatus
@@ -14,7 +15,8 @@ import org.springframework.web.bind.annotation.*
 @RestController
 class DeliveryController(
     private val deliveryRequestService: DeliveryRequestService,
-    private val deliveryRepository: DeliveryRepository
+    private val deliveryRepository: DeliveryRepository,
+    private val finishDeliveryService: FinishDeliveryService
 ) {
 
     @GetMapping
@@ -39,5 +41,11 @@ class DeliveryController(
     fun request(@RequestBody deliveryInput: DeliveryInput): DeliveryModel {
         val delivery = deliveryInput.toEntity()
         return deliveryRequestService.request(delivery).toDeliveryModel()
+    }
+
+    @PutMapping("/{deliveryId}/finish")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun finish(@PathVariable deliveryId: Long) {
+        finishDeliveryService.finish(deliveryId)
     }
 }
