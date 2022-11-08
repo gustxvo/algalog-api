@@ -1,10 +1,11 @@
 package com.algaworks.algalog.api.controller
 
 import com.algaworks.algalog.api.model.DeliveryModel
-import com.algaworks.algalog.api.model.toDeliveryModel
-import com.algaworks.algalog.domain.model.Delivery
+import com.algaworks.algalog.api.model.input.DeliveryInput
 import com.algaworks.algalog.domain.repository.DeliveryRepository
 import com.algaworks.algalog.domain.service.DeliveryRequestService
+import com.algaworks.algalog.mapper.toDeliveryModel
+import com.algaworks.algalog.mapper.toEntity
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -17,8 +18,10 @@ class DeliveryController(
 ) {
 
     @GetMapping
-    fun list(): List<Delivery> {
-        return deliveryRepository.findAll()
+    fun list(): List<DeliveryModel> {
+        return deliveryRepository.findAll().map {
+            it.toDeliveryModel()
+        }
     }
 
     @GetMapping("/{deliveryId}")
@@ -33,7 +36,8 @@ class DeliveryController(
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun request(@RequestBody delivery: Delivery): Delivery {
-        return deliveryRequestService.request(delivery)
+    fun request(@RequestBody deliveryInput: DeliveryInput): DeliveryModel {
+        val delivery = deliveryInput.toEntity()
+        return deliveryRequestService.request(delivery).toDeliveryModel()
     }
 }

@@ -1,7 +1,6 @@
 package com.algaworks.algalog.domain.model
 
 import com.algaworks.algalog.domain.ValidationGroups
-import com.fasterxml.jackson.annotation.JsonProperty
 import java.math.BigDecimal
 import java.time.OffsetDateTime
 import javax.persistence.*
@@ -30,13 +29,10 @@ data class Delivery(
     @NotNull
     val fee: BigDecimal,
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @Enumerated(EnumType.STRING)
     val status: DeliveryStatus?,
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     val requestDate: OffsetDateTime?,
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     val finishDate: OffsetDateTime?
 )
